@@ -194,40 +194,124 @@ func find_variables_replace(lines [] string){
                     continue
                 }
                 variables_index_s:=fmt.Sprintf("%d",variables_index)
-                variables_replace[variable_name] = "variable_"+variables_index_s
+                variables_replace[variable_name] = "pan_"+variables_index_s+"_"
                 variables_index ++
-                fmt.Println(" 变量名:[",variable_name,"] ,配置为 :","pan_variable_"+variables_index_s)
+                fmt.Println(" 变量名:[",variable_name,"] ,配置为 :","pan_"+variables_index_s)
                 //fmt.Println(" find variable name:",variable_name," ,config to :","variable_"+variables_index_s)
             }
         }
- 
      }
-
-
      gen_variable_replace_order()
 
 }
+type code_string struct{
+    is_string bool
+    content string
+}
+func split_code_line(line string)[]code_string{
+    var code_string1 = []code_string{}
+    
+    quote_n :=strings.Count(line,"\"")
+    //fmt.Println("quote_n",quote_n)
 
-func replace_with_reserved(line string)string{
+    if strings.Contains(line,"“") && strings.Contains(line,"”") {
+        line1 := strings.Split(line,"“")
+        var code_string_t code_string
+        code_string_t.is_string = false
+        code_string_t.content = line1[0] 
+        code_string1 = append(code_string1,code_string_t)
+        for i := 1; i < len(line1); i++ {
+            line1[i] = line1[i]
+            line2 := strings.Split(line1[i],"”")
+            if len(line2)>1{
+                var code_string_t code_string
+                code_string_t.is_string = true
+                code_string_t.content = "\"" + line2[0]+"\""
+                code_string1 = append(code_string1,code_string_t)         
+                var code_string_t1 code_string
+                code_string_t1.is_string = false
+                code_string_t1.content =   line2[1] 
+                code_string1 = append(code_string1,code_string_t1)      
 
-    for _, key := range reserved_word_order{
-        line = strings.ReplaceAll(line,key,reserved_word[key])
+                if len(line2)>2 {
+                    fmt.Println("seems wrong")                 
+                }
+            }else{
+                fmt.Println("seems wrong")
+            }
+        }
     }
-    return line
+    
+    if quote_n %2 ==0 && quote_n>1  {
+        line1 := strings.Split(line,"\"")
+        var code_string_t code_string
+        code_string_t.is_string = false
+        code_string_t.content = line1[0]
+        code_string1 = append(code_string1,code_string_t)
+        for i := 1; i < len(line1); i++ {
+            line1[i] = line1[i]
+            var code_string_t code_string
+            if i%2 == 1{
+                code_string_t.is_string = true
+                code_string_t.content = "\""+line1[i] 
+                code_string1 = append(code_string1,code_string_t) 
+            }else{
+                code_string_t.is_string = false
+                code_string_t.content = "\""+line1[i]
+                if i != len(line1)-1{
+                   // code_string_t.content += "\""
+                }
+                code_string1 = append(code_string1,code_string_t) 
+            }
+        }
+    }
+
+    return code_string1
 }
 
-func replace_with_variables(line string)string{
-
-    for _, key := range variables_order{
-        line = strings.ReplaceAll(line,key,variables_replace[key])
+func replace_with_array(line string,rep_order []string,rep map[string]string,force bool)string{
+    split_o := split_code_line(line)
+    if len(split_o)>0{
+        //fmt.Println("------\nline",line)
+        //fmt.Println("split out",split_o)
     }
+
+    if !force && len(split_o)>0{
+        line1 := ""
+        for _,v := range split_o{
+            if v.is_string==false{
+                //fmt.Println(k,v.content,"force",force)
+                for _, key := range rep_order{
+                    v.content = strings.ReplaceAll(v.content,key,rep[key]) 
+                }
+            }
+            line1 += v.content
+        }
+        line = line1
+    }else {
+        for _, key := range rep_order{
+            line = strings.ReplaceAll(line,key,rep[key])  
+        }
+    }
+
+    //fmt.Println("line out",line)
+    
     return line
 }
+ 
+var force bool
+func replace_key_word(line string)string{  
+    
+    if (strings.Contains(line,"导入包")){
+        force = true
+    }
+    if (strings.Contains(line,")")||strings.Contains(line,"）")){
+        force = false
+    }
 
-func replace_key_word(line string)string{
-    line = replace_with_reserved(line)
+    line = replace_with_array(line,reserved_word_order,reserved_word,force)
 
-    line = replace_with_variables(line)
+    line = replace_with_array(line,variables_order,variables_replace,force)
     return line
 }
 
@@ -302,6 +386,7 @@ func init_reserved_word(){
     set_reserved_word("打印","Println")
     set_reserved_word("系统","os")
     set_reserved_word("打开","Open")
+    set_reserved_word("关闭文件","Close")
     set_reserved_word("传入参数","Args")
     set_reserved_word("工具集","utils")
     set_reserved_word("初始化函数","Initial")
