@@ -86,10 +86,9 @@ func remove_reserved_word_array(lines []string)[]string{
         for index := 0; index < len(reserved_word_order); index++ {
             reserved_word := reserved_word_order[index]
             if len(reserved_word)>0{
-                lines[i] = strings.ReplaceAll(lines[i]+" ",reserved_word,"")
-                lines[i] = strings.ReplaceAll(" "+lines[i],reserved_word,"")
-                lines[i] = strings.ReplaceAll(lines[i],reserved_word,"")
-                lines[i] = strings.ReplaceAll(" ",reserved_word,"")
+                lines[i] = strings.ReplaceAll(lines[i]+" ",reserved_word," ")
+                lines[i] = strings.ReplaceAll(" "+lines[i],reserved_word," ")
+                lines[i] = strings.ReplaceAll(lines[i],reserved_word," ")
             }
         }
     }

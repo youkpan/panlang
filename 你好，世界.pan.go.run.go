@@ -41,7 +41,7 @@ func main(){
     pan_4_ := make(map [string  ] string)
     pan_4_ ["天王星"  ] = " 比海王星近"
     pan_4_ ["地球"  ] = " 我们的家园"
-    pan_4_ = pan_17_(pan_4_)
+    pan_4_ = pan_15_(pan_4_)
     for pan_5_1 ,pan_7_ := range  pan_4_ {
         if pan_5_1 == "地球" {
             fmt.Println("发现地球"  )
@@ -52,40 +52,40 @@ func main(){
     }
     fmt.Println("")
     fmt.Println("读取文件")
-    pan_19_("README.md")
+    pan_17_("README.md")
 
     for {
-        pan_13_ := time . Now() . Format(utils.TIME_LAYOUT)
-        fmt.Println("现在是：",pan_13_)
+        pan_12_ := time . Now() . Format(utils.TIME_LAYOUT)
+        fmt.Println("现在是：",pan_12_)
         time. Sleep( time.Duration(10)* time.Second)
     }
 }
 
-func pan_17_ (pan_18_1 map [string  ] string)map [string  ] string{
-    pan_18_1 ["火星" ] = "要去吗"
-    return pan_18_1
+func pan_15_ (pan_16_1 map [string  ] string)map [string  ] string{
+    pan_16_1 ["火星" ] = "要去吗"
+    return pan_16_1
 }
 
-func pan_19_ (pan_20_ string) string{
-    pan_21_1 ,pan_22_ := os . Open(pan_20_)
-    if pan_22_ != nil{
+func pan_17_ (pan_18_ string) string{
+    pan_19_1 ,pan_20_ := os . Open(pan_18_)
+    if pan_20_ != nil{
         return ""
     }
-    defer pan_21_1 . Close()
-    reader1 := bufio . NewReader(pan_21_1)
+    defer pan_19_1 . Close()
+    reader1 := bufio . NewReader(pan_19_1)
 
-    pan_23_ := [] string {}
+    pan_21_ := [] string {}
 
     for {
-        pan_24_, pan_22_2 := reader1 . ReadString('\n')
-        pan_25_string := string(pan_24_)
+        pan_22_, pan_20_2 := reader1 . ReadString('\n')
+        pan_24_string := string(pan_22_)
 
-        fmt.Println(pan_25_string)
-        if pan_22_2 != nil{
+        fmt.Println(pan_24_string)
+        if pan_20_2 != nil{
             break
         }
-        pan_23_ =  append (pan_23_ ,pan_25_string)
-        return pan_25_string
+        pan_21_ =  append (pan_21_ ,pan_24_string)
+        return pan_24_string
     }
 
     return ""
