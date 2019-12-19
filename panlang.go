@@ -26,6 +26,7 @@ import (
 
 var variables_replace map[string]string
 var reserved_word_order []string
+var variables_order []string
 var reserved_word map[string]string
 
 func main(){
@@ -68,7 +69,7 @@ func main(){
      }
 
      find_variables_replace(lines)
-
+     
      for i := 0; i < len(lines); i++ {
         line2 := replace_key_word(lines[i])
         file_out_content += line2+"\r\n"
@@ -201,6 +202,10 @@ func find_variables_replace(lines [] string){
         }
  
      }
+
+
+     gen_variable_replace_order()
+
 }
 
 func replace_with_reserved(line string)string{
@@ -211,10 +216,10 @@ func replace_with_reserved(line string)string{
     return line
 }
 
-func replace_with_wordmap(line string,wordmap map[string]string)string{
+func replace_with_variables(line string)string{
 
-    for old,new := range wordmap{
-        line = strings.ReplaceAll(line,old,new)
+    for _, key := range variables_order{
+        line = strings.ReplaceAll(line,key,variables_replace[key])
     }
     return line
 }
@@ -222,7 +227,7 @@ func replace_with_wordmap(line string,wordmap map[string]string)string{
 func replace_key_word(line string)string{
     line = replace_with_reserved(line)
 
-    line = replace_with_wordmap(line,variables_replace)
+    line = replace_with_variables(line)
     return line
 }
 
@@ -278,6 +283,10 @@ func init_reserved_word(){
     set_reserved_word("选择执行","switch")
     set_reserved_word("当","case")
     set_reserved_word("当它为","case")
+    set_reserved_word("等待用户输入","input")
+    set_reserved_word("空","_")
+    set_reserved_word("空引用","nil")
+    
 
     set_reserved_word("等待队列执行完毕","<-")
     set_reserved_word("队列","chan")
@@ -292,9 +301,22 @@ func init_reserved_word(){
     set_reserved_word("格式","fmt")
     set_reserved_word("打印","Println")
     set_reserved_word("系统","os")
+    set_reserved_word("打开","Open")
     set_reserved_word("传入参数","Args")
     set_reserved_word("工具集","utils")
     set_reserved_word("初始化函数","Initial")
+    set_reserved_word("时间","time")
+    set_reserved_word("转换格式","Format")
+    set_reserved_word("时间格式","utils.TIME_LAYOUT")
+    set_reserved_word("此刻","Now()")
+    set_reserved_word("睡眠","Sleep")
+    set_reserved_word("时间长度","time.Duration")
+    set_reserved_word("1秒时间","time.Second")
+    set_reserved_word("缓存","bufio")
+    set_reserved_word("阅读器","reader")
+    set_reserved_word("新建阅读器","NewReader")
+    set_reserved_word("读字符串直到","ReadString")
+    set_reserved_word("换行符","'\\n'")
 
     set_reserved_word("显示数","%d")
     set_reserved_word("显示字符串","%s")
@@ -395,4 +417,13 @@ func gen_reserved_word_order(){
     reserved_word_order = word_order
 }
 
+func gen_variable_replace_order(){
+    var word_order string_array
+
+    for k,_ := range variables_replace{
+        word_order = append(word_order,k)
+    }
+    sort.Stable(word_order)
+    variables_order = word_order
+}
   

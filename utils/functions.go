@@ -27,6 +27,7 @@ import (
 
 
 const (
+	TIME_LAYOUT = "2006-01-02 15:04:05"
     StdPadding rune = '=' // Standard padding character
     NoPadding  rune = -1  // No padding
 )
