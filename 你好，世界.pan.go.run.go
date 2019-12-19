@@ -26,13 +26,13 @@ func main(){
     fmt.Println(" 欢迎 使用 pan 语言,详细使用说明请查看：  https://github.com/youkpan/panlang")
     fmt.Println("")
     fmt.Println("方法1："  )
-    for variable_71 := 0 ; variable_71 <  len(variable_2); variable_71 = variable_71 + 1 {
-        fmt.Println(variable_2 [ variable_71 ] )
+    for variable_61 := 0 ; variable_61 <  len(variable_2); variable_61 = variable_61 + 1 {
+        fmt.Println(variable_2 [ variable_61 ] )
     }
     fmt.Println("")
     fmt.Println("方法2："  )
-    for variable_71 ,variable_8 := range  variable_2 {
-        fmt.Println("索引 值：",variable_71,",结果：",variable_8 )
+    for variable_61 ,variable_7 := range  variable_2 {
+        fmt.Println("索引 值：",variable_61,",结果：",variable_7 )
     }
     fmt.Println("")
     fmt.Println("方法3："  )
@@ -40,12 +40,12 @@ func main(){
     variable_4 ["天王星"  ] = " 比海王星近"
     variable_4 ["地球"  ] = " 我们.家园"
 
-    for variable_71 ,variable_8 := range  variable_4 {
-        if variable_71 == "地球" {
+    for variable_61 ,variable_7 := range  variable_4 {
+        if variable_61 == "地球" {
             fmt.Println("发现地球"  )
-            fmt.Println("索引 值：",variable_71,",结果：",variable_8  )
+            fmt.Println("索引 值：",variable_61,",结果：",variable_7  )
         }else{
-            fmt.Println("索引 值：",variable_71,",结果：",variable_8 )
+            fmt.Println("索引 值：",variable_61,",结果：",variable_7 )
         }
     }
 
